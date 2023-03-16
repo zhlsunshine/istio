@@ -262,10 +262,13 @@ func constructConfig() (*config.Config, error) {
 	}
 
 	if len(installCfg.K8sNodeName) == 0 {
-		var err error
-		installCfg.K8sNodeName, err = os.Hostname()
-		if err != nil {
-			return nil, err
+		installCfg.K8sNodeName = os.Getenv("NODE_NAME")
+		if len(installCfg.K8sNodeName) == 0 {
+			var err error
+			installCfg.K8sNodeName, err = os.Hostname()
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
 
